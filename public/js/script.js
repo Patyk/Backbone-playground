@@ -144,7 +144,6 @@ var PeopleView = Backbone.View.extend({
     },
 
     render: function () {
-        console.log("in People view render");
         var self = this;
         this.$el.html('');
         _.each(this.model.toArray(), function (person) {
