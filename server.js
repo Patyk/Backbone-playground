@@ -1,11 +1,58 @@
 var express = require('express');
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/People_Table')
+
+var Schema = mongoose.Schema;
+
+var PersonSchema = new Schema({
+    name: String,
+    age: Number,
+    occupation: String,
+    gender: String
+})
+
+mongoose.model('Person', PersonSchema);
+
+var Person = mongoose.model('Person');
+
+var person = new Person({
+    name: 'Gosia',
+    age : 21,
+    occupation: 'It gal',
+    gender: 'F'
+});
+person.save();
 
 var app = express();
 
-app.use(express.static(_dirname + '/public'));
+app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.json());
+// ROUTES
 
-var port = 6666;
+app.get()
+app.get('/api/person', function (req, res) {
+   Person.find(function (err, docs) {
+       docs.forEach(function (item) {
+           console.log('Received a GET request for _id: ' + item._id);
+       })
+       res.send(docs);
+   })
+});
 
-app.listen(port);
+app.post('/api/person', function (req, res) {
+    console.log('Received a POST request');
+    for (var key in req.body){
+        console.log(key + ': ' + req.body[key]);
+    }
+    var person = new Person(req.body);
+    person.save(function (err, doc) {
+        res.send(doc);
+    })
+});
+
+var port = 16667;
+
+app.listen(port, '0.0.0.0');
 console.log('server on '+ port);
 
