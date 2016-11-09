@@ -21,20 +21,20 @@ var People = Backbone.Collection.extend({
 });
 
 // instantiate sample group of people
-var person1 = new Person({
-    name: 'Mohit Jain',
-    age: 26,
-});
-var person2 = new Person({
-    name: 'Taroon Tyagi',
-    age: 25,
-    occupation: 'web designer'
-});
-var person3 = new Person({
-    name: 'Rahul Narang',
-    age: 26,
-    occupation: 'Java Developer'
-});
+// var person1 = new Person({
+//     name: 'Mohit Jain',
+//     age: 26,
+// });
+// var person2 = new Person({
+//     name: 'Taroon Tyagi',
+//     age: 25,
+//     occupation: 'web designer'
+// });
+// var person3 = new Person({
+//     name: 'Rahul Narang',
+//     age: 26,
+//     occupation: 'Java Developer'
+// });
 
 // instantiate a Collection
 var people = new People();
@@ -148,6 +148,11 @@ var PeopleView = Backbone.View.extend({
                     + item._id);
             }
         });
+        this.model.on('all',
+            function () {
+                setTimeout(function () {self.render();}, 50)
+            }, this);
+
     },
 
     render: function () {
@@ -171,8 +176,6 @@ $(document).ready(function () {
         function () {
             $(this).css({'background-color': '#FFFFFF'});
         });
-    console.log("document loaded");
-    // $('.people-list').show(people.fetch());
 
     $('.add-person').on('click', function () {
         var newPerson = new Person();
