@@ -16,13 +16,13 @@ mongoose.model('Person', PersonSchema);
 
 var Person = mongoose.model('Person');
 
-var person = new Person({
-    name: 'Gosia',
-    age : 21,
-    occupation: 'It gal',
-    gender: 'F'
-});
-person.save();
+// var person = new Person({
+//     name: 'Gosia',
+//     age : 21,
+//     occupation: 'It gal',
+//     gender: 'F'
+// });
+// person.save();
 
 var app = express();
 
@@ -30,19 +30,18 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 // ROUTES
 
-app.get()
 app.get('/api/person', function (req, res) {
-   Person.find(function (err, docs) {
-       docs.forEach(function (item) {
-           console.log('Received a GET request for _id: ' + item._id);
-       })
-       res.send(docs);
-   })
+    Person.find(function (err, docs) {
+        docs.forEach(function (item) {
+            console.log('Received a GET request for _id: ' + item._id);
+        });
+        res.send(docs);
+    })
 });
 
 app.post('/api/person', function (req, res) {
     console.log('Received a POST request');
-    for (var key in req.body){
+    for (var key in req.body) {
         console.log(key + ': ' + req.body[key]);
     }
     var person = new Person(req.body);
@@ -51,8 +50,19 @@ app.post('/api/person', function (req, res) {
     })
 });
 
+app.delete('/api/person/:id',
+    function (req, res) {
+        console.log('DELETE request for id: ' + req.params.id);
+        Person.remove({_id: req.params.id},
+            function (err, doc) {
+                console.log('removed');
+                res.send({_id: req.params.id});
+            });
+    });
+
+
 var port = 16667;
 
 app.listen(port, '0.0.0.0');
-console.log('server on '+ port);
+console.log('server on ' + port);
 

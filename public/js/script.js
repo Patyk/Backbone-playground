@@ -49,7 +49,7 @@ var PersonView = Backbone.View.extend({
     events: {
         'click .edit': 'editPerson',
         'click .update': 'updatePerson',
-        'click .delete': 'destroyPerson'
+        'click .delete': 'delete'
     },
 
     editPerson: function () {
@@ -90,16 +90,23 @@ var PersonView = Backbone.View.extend({
 
         this.model.save(null, {
             success: function (response) {
-                console.log('Successfully UPDATED person with _id: ' + response.toJSON()._id);
+                console.log('Successfully UPDATED person with id: ' + response.toJSON()._id);
             },
-            error: function (err) {
-                console.log('Failed to update persons\'s details!');
+            error: function () {
+                console.log('Failed to update persons');
             }
         });
     },
 
-    destroyPerson: function () {
-        this.model.destroy();
+    delete: function () {
+        this.model.destroy({
+            success: function(res) {
+                console.log('Successfully DELETED person with _id: ' + res.toJSON()._id)
+            },
+            error: function() {
+                console.log('Failed to delete persons');
+            }
+        });
     },
 
     remove: function () {
