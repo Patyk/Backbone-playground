@@ -60,6 +60,19 @@ app.delete('/api/person/:id',
             });
     });
 
+app.put('/api/person/:id',
+    function (req, res) {
+        console.log('Received UPDATE for person with id: ' + req.params.id
+            + req.body.name + req.body.age + req.body.gender + req.body.occupation
+        );
+        Person.update({_id: req.params.id}
+            , req.body
+            , function (err) {
+                res.send({_id: req.params.id});
+            }
+        );
+    }
+);
 
 var port = 16667;
 

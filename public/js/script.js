@@ -51,7 +51,14 @@ var PersonView = Backbone.View.extend({
         'click .update': 'updatePerson',
         'click .delete': 'delete'
     },
+    modelEvents: {
+        'change': 'render'
+    },
 
+    // fieldsChanged: function() {
+    //     this.render();
+    //     console.log('foooooo');
+    // },
     editPerson: function () {
 
         $('.edit').hide();
@@ -90,12 +97,16 @@ var PersonView = Backbone.View.extend({
 
         this.model.save(null, {
             success: function (response) {
+                console.log('### in success before render');
+                this.render;
                 console.log('Successfully UPDATED person with id: ' + response.toJSON()._id);
             },
-            error: function () {
-                console.log('Failed to update persons');
+            error: function (response) {
+                console.log('Failed to update persons with id: ' + response.toJSON()._id);
             }
         });
+        console.log('### in update person before render');
+        this.render;
     },
 
     delete: function () {
@@ -114,6 +125,7 @@ var PersonView = Backbone.View.extend({
     },
 
     render: function () {
+        console.log('####render person');
         this.$el.html(this.template(this.model.toJSON()));
         return this;
     }
@@ -124,15 +136,18 @@ var PeopleView = Backbone.View.extend({
     model: people,
     el: $('.people-list'),
 
+
     initialize: function () {
         var self = this;
         this.model.on('add', this.render, this);
-        this.model.on('change',
-            function () {
-                setTimeout(function () {
-                    self.render();
-                }, 50)
-            }, this);
+        // this.model.on('change',
+        //     function () {
+        //         console.log('###on change');
+        //         setTimeout(function () {
+        //             self.render();
+        //             console.log('###set time on change');
+        //         }, 30)
+        //     }, this);
         this.model.on('remove', this.render, this);
         this.model.fetch({
             success: function (response) {
@@ -148,10 +163,8 @@ var PeopleView = Backbone.View.extend({
                     + item._id);
             }
         });
-        this.model.on('all',
-            function () {
-                setTimeout(function () {self.render();}, 50)
-            }, this);
+
+        this.model.on('all', this.render, this);
 
     },
 
